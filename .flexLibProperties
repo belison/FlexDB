@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" version="3">
+  <includeClasses>
+    <classEntry path="BaseDB"/>
+    <classEntry path="UnitTests.FlexDBTestSuite"/>
+    <classEntry path="UnitTests.BaseDBTester"/>
+    <classEntry path="Table"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
