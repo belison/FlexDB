@@ -84,6 +84,17 @@ package
 			return inserted
 		}
 		
+		public function update(item:Object):void {
+			if (unique_key && indexes.hasOwnProperty(unique_key) ) {
+				
+				if (indexes[unique_key].hasOwnProperty(item[unique_key])) {
+					remove(item);	
+				}
+				
+				insert(new ArrayCollection([item]));
+			}
+		}
+		
 		public function remove(item:Object):void {
 			for (var index:String in indexes) {
 				unindexItem(item, index);

@@ -70,7 +70,14 @@ package FlexUnitTests
 		
 		[Test]
 		public function testFindAll():void {
+			var row:Object = new Object;
+			row.id = 'uniqueIDValue2';
+			row.description = 'here is the object description for insert test';
+			row.date = new Date;
 			
+			table.insert(new ArrayCollection([row]));
+			
+			Assert.assertEquals(table.find_all().length,2);
 		}
 		
 		[Test]
@@ -87,7 +94,15 @@ package FlexUnitTests
 		
 		[Test]
 		public function testRemove():void {
+			var row:Object = new Object;
+			row.id = 'uniqueIDValue2';
+			row.description = 'here is the object description for insert test';
+			row.date = new Date;
 			
+			table.insert(new ArrayCollection([row]));
+			table.remove(row);
+			
+			Assert.assertNull(table.find('uniqueIDValue2'));
 		}
 		
 		[Test]
@@ -97,7 +112,7 @@ package FlexUnitTests
 		
 		[Test]
 		public function testGetUniqueKey():void {
-			
+			Assert.assertEquals(table.unique_key, 'id');
 		}
 		
 		[Test]
