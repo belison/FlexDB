@@ -41,7 +41,14 @@ package
 			return t;
 		}
 		
-		
+		public static function removeTable(name:String):Boolean {
+			if (instance.tables.hasOwnProperty(name)) {
+				delete instance.tables[name];
+				return true;
+			}
+			
+			return false;
+		}
 		
 	}
 }

@@ -90,6 +90,7 @@ package
 			}
 		}
 		
+		
 		public function set unique_key(key:String):void {
 			_unique_key = key;
 			addIndexes([key]);
