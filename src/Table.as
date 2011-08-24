@@ -96,8 +96,12 @@ package
 		}
 		
 		public function remove(item:Object):void {
-			for (var index:String in indexes) {
-				unindexItem(item, index);
+			if (raw_collection.contains(item)) {
+				for (var index:String in indexes) {
+					unindexItem(item, index);
+				}
+				
+				raw_collection.removeItemAt(raw_collection.getItemIndex(item));
 			}
 		}
 		
