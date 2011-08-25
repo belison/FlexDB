@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testrun name="" >
 <testsuite  name="Default Test Suite" project="FlexDB">
-<testsuite name="FlexUnitTests:TableTester" type="testsuiteclass"/>
 <testsuite name="FlexUnitTests:BaseDBTester" type="testsuiteclass"/>
+<testsuite name="FlexUnitTests:TableTester" type="testsuiteclass"/>
 <testsuite name="FlexUnitTests:FlexDBTestSuite" type="testcaseclass"/>
 </testsuite>
 </testrun>

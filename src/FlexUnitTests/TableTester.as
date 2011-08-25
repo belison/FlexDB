@@ -21,6 +21,7 @@ package FlexUnitTests
 			
 			var row:Object = new Object;
 			row.id = 'uniqueIDValue';
+			row.type = 1;
 			row.description = 'here is the object description';
 			row.date = new Date;
 			
@@ -60,12 +61,58 @@ package FlexUnitTests
 		}
 		
 		[Test]
+		public function testInsertUnique():void {
+			var row:Object = new Object;
+			row.id = 'uniqueIDValue3';
+			row.description = 'here is the object description for insert test';
+			row.date = new Date;
+			
+			table.insert(new ArrayCollection([row]));
+			
+			Assert.assertEquals( table.insert(new ArrayCollection([row])).length, 0);
+		}
+		
+		[Test]
 		public function testFind():void {
 			var t:Table = BaseDB.getTableByName('testingTable');
 			
 			var row:Object = t.find('uniqueIDValue');
 			Assert.assertNotNull(row);
 			Assert.assertEquals(row.description, 'here is the object description');
+		}
+		
+		[Test]
+		public function testFind_all_by():void {
+			var t:Table = BaseDB.getTableByName('testingTable');
+			t.addIndexes(['type']);
+			
+			var row:Object = new Object;
+			row.id = 'uniqueIDValue2';
+			row.type = 1;
+			row.description = 'here is the object description';
+			row.date = new Date;
+			
+			table.insert(new ArrayCollection([row]));
+			
+			row = new Object;
+			row.id = 'uniqueIDValue3';
+			row.type = 2;
+			row.description = 'here is the object description';
+			row.date = new Date;
+			
+			table.insert(new ArrayCollection([row]));
+			
+			row = new Object;
+			row.id = 'uniqueIDValue4';
+			row.type = 2;
+			row.description = 'here is the object description';
+			row.date = new Date;
+			
+			table.insert(new ArrayCollection([row]));
+			table.remove(row);
+			
+			Assert.assertEquals( t.find_all_by('type', '1' ).length, 2);
+			Assert.assertEquals( t.find_all_by('type', '2' ).length, 1);	
 		}
 		
 		[Test]

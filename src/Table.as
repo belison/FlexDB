@@ -30,13 +30,22 @@ package
 		}
 		
 		public function find_all():ArrayCollection {
-			return raw_collection;
+			var return_col:ArrayCollection = new ArrayCollection;
+			
+			if (raw_collection) {	
+				return_col.source = return_col.source.concat(raw_collection.source);
+			}
+			
+			return return_col;
 		}
 		
 		public function find_all_by(index:String, value:String):ArrayCollection {
-			var col:ArrayCollection = new ArrayCollection(indexes[index][value]);
-			
-			return  col;
+			var return_col:ArrayCollection = new ArrayCollection;
+			if (indexes[index].hasOwnProperty(value) && indexes[index][value] && indexes[index][value] is Array) {
+				return_col.source = return_col.source.concat(indexes[index][value]);
+			}
+
+			return  return_col;
 		}
 		
 		public function find_between(index:String, start:Object, end:Object):ArrayCollection {
