@@ -1,6 +1,11 @@
 package  
 {
+	import flash.events.Event;
+	
+	import mx.binding.utils.BindingUtils;
+	import mx.binding.utils.ChangeWatcher;
 	import mx.collections.ArrayCollection;
+	import mx.events.PropertyChangeEvent;
 
 	public class Table
 	{
@@ -143,7 +148,7 @@ package
 			}
 		}
 		
-		private function indexItem(item:Object, index:String):void {
+		private function indexItem(item:Object, index:String, watch:Boolean = true):void {
 			if (item.hasOwnProperty(index) || (index.indexOf('.') > -1)) {
 				if (index == unique_key) {
 					indexes[index][item[index]] = item;
@@ -171,6 +176,10 @@ package
 						}
 						
 						(indexes[index][item[index].toString()] as Array).push(item);
+						
+						if (ChangeWatcher.canWatch(item, index) && watch) {
+							var watcher:ChangeWatcher = ChangeWatcher.watch(item, index, handleIndexValueChanged);
+						}
 					}
 				}
 				
@@ -208,6 +217,17 @@ package
 				}
 			}
 			
+		}
+		
+		
+		private function handleIndexValueChanged(event:PropertyChangeEvent):void {
+			var oldIndex:Number = (indexes[event.property.toString()][event.oldValue.toString()] as Array).indexOf(event.source)
+			
+			if (oldIndex > -1) {
+				(indexes[event.property.toString()][event.oldValue.toString()] as Array).splice(oldIndex, 1);
+			}
+			
+			indexItem(event.source, event.property.toString(), false);
 		}
 		
 		
