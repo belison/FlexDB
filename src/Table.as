@@ -9,6 +9,7 @@ package
 
 	public class Table
 	{
+			
 		private var _unique_key:String;
 		
 		private var indexes:Object = new Object;
@@ -98,16 +99,6 @@ package
 			return inserted
 		}
 		
-		public function update(item:Object):void {
-			if (unique_key && indexes.hasOwnProperty(unique_key) ) {
-				
-				if (indexes[unique_key].hasOwnProperty(item[unique_key])) {
-					remove(item);	
-				}
-				
-				insert(new ArrayCollection([item]));
-			}
-		}
 		
 		public function remove(item:Object):void {
 			if (raw_collection.contains(item)) {
@@ -149,7 +140,7 @@ package
 		}
 		
 		private function indexItem(item:Object, index:String, watch:Boolean = true):void {
-			if (item.hasOwnProperty(index) || (index.indexOf('.') > -1)) {
+			if (item.hasOwnProperty(index) && item[index] !== undefined || (index.indexOf('.') > -1)) {
 				if (index == unique_key) {
 					indexes[index][item[index]] = item;
 				} else {
