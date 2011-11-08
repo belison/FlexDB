@@ -24,7 +24,7 @@ package
 		}
 		
 		public function find(key:String):Object {
-			if (unique_key && indexes.hasOwnProperty(unique_key) ) {
+			if (key && unique_key && indexes.hasOwnProperty(unique_key) ) {
 				
 				if (indexes[unique_key].hasOwnProperty(key)) {
 					return indexes[unique_key][key]
@@ -54,13 +54,20 @@ package
 			return  return_col;
 		}
 		
-		public function find_between(index:String, start:Object, end:Object):ArrayCollection {
+		public function find_between(index:String, start:Object, end:Object, compareFunction:Function = null):ArrayCollection {
 			var col:ArrayCollection = new ArrayCollection();
 			
-			for each (var key:Object in indexes[index]) {			
-				if (key >= start || key <= end) {
-					col.addAll(indexes[index][key])
-				} 		
+			for (var key:Object in indexes[index]) {		
+				if (Boolean(compareFunction)) {
+					if (compareFunction.call(this, start,end,key)) {
+						col.source = col.source.concat(indexes[index][key]);
+					}	
+				} else {
+				
+					if (key >= start && key <= end) {
+						col.source = col.source.concat(indexes[index][key]);
+					} 		
+				}
 			}
 			
 			return col
@@ -144,6 +151,8 @@ package
 				if (index == unique_key) {
 					indexes[index][item[index]] = item;
 				} else {
+					var watcher:ChangeWatcher;
+					
 					if (index.indexOf('.') > -1) {
 						//complex index
 						var pieces:Array = index.split('.');
@@ -159,6 +168,10 @@ package
 							(indexes[index][subItem[arrayVal].toString()] as Array).push(item);
 						}
 						
+						if (ChangeWatcher.canWatch(item, arrayKey) && watch) {
+							watcher = ChangeWatcher.watch(item, arrayKey, handleComplexIndexValueChanged);
+						}
+						
 						
 					} else {
 					
@@ -169,7 +182,7 @@ package
 						(indexes[index][item[index].toString()] as Array).push(item);
 						
 						if (ChangeWatcher.canWatch(item, index) && watch) {
-							var watcher:ChangeWatcher = ChangeWatcher.watch(item, index, handleIndexValueChanged);
+							watcher = ChangeWatcher.watch(item, index, handleIndexValueChanged);
 						}
 					}
 				}
@@ -178,7 +191,7 @@ package
 			}
 		}
 		
-		private function unindexItem(item:Object, index:String):void {
+		private function unindexItem(item:Object, index:String, oldValue:Object = null):void {
 			if (index == unique_key) {
 				delete indexes[index][item[index]]
 			} else {
@@ -189,8 +202,14 @@ package
 					var pieces:Array = index.split('.');
 					var arrayKey:String = pieces[0];
 					var arrayVal:String = pieces[1];
+					var loopCollection:Object = item[arrayKey];
 					
-					for each(var subItem:Object in item[arrayKey]) {
+					
+					if (oldValue) {
+						loopCollection = oldValue;
+					}
+					
+					for each(var subItem:Object in loopCollection) {
 						itemIndex = (indexes[index][subItem[arrayVal].toString()] as Array).indexOf(item)
 						
 						if (itemIndex > -1) {
@@ -222,6 +241,16 @@ package
 		}
 		
 		
-		
+		private function handleComplexIndexValueChanged(event:PropertyChangeEvent):void {
+			if (event.oldValue.length > 0) {
+				unindexItem(event.source, complexKey, event.oldValue);
+			} 
+			
+			if (event.newValue.length > 0) {
+				var complexKey:String = event.property.toString()+'.'+(event.newValue as ArrayCollection).getItemAt(0)['complexIndexKey'];
+			
+				indexItem(event.source, complexKey, false);
+			}
+		}
 	}
 }
