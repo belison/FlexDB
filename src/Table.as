@@ -210,6 +210,9 @@ package
 					}
 					
 					for each(var subItem:Object in loopCollection) {
+						if (!(indexes[index] as Object).hasOwnProperty(subItem[arrayVal].toString()) ) {
+							continue;
+						}
 						itemIndex = (indexes[index][subItem[arrayVal].toString()] as Array).indexOf(item)
 						
 						if (itemIndex > -1) {
@@ -242,13 +245,13 @@ package
 		
 		
 		private function handleComplexIndexValueChanged(event:PropertyChangeEvent):void {
+			var complexKey:String = event.property.toString()+'.'+(event.newValue as ArrayCollection).getItemAt(0)['complexIndexKey'];
+			
 			if (event.oldValue.length > 0) {
 				unindexItem(event.source, complexKey, event.oldValue);
 			} 
 			
 			if (event.newValue.length > 0) {
-				var complexKey:String = event.property.toString()+'.'+(event.newValue as ArrayCollection).getItemAt(0)['complexIndexKey'];
-			
 				indexItem(event.source, complexKey, false);
 			}
 		}
