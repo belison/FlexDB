@@ -81,13 +81,17 @@ package
 		}
 		
 		
-		public function insert(collection:ArrayCollection):ArrayCollection {
+		public function insert(collection:ArrayCollection, mergeFunction:Function = null):ArrayCollection {
 			var inserted:ArrayCollection = new ArrayCollection;
 			
 			for each (var item:Object in collection) {
 				if (unique_key && indexes.hasOwnProperty(unique_key) ) {
 					
 					if (indexes[unique_key].hasOwnProperty(item[unique_key])) {
+						//Already exists need to compare
+						if ( Boolean(mergeFunction) ) {
+							mergeFunction.call(this, indexes[unique_key][item[unique_key]], item);
+						}
 						continue
 					}
 	
