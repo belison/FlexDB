@@ -248,14 +248,16 @@ package
 		}
 		
 		
-		private function handleComplexIndexValueChanged(event:PropertyChangeEvent):void {
-			var complexKey:String = event.property.toString()+'.'+(event.newValue as ArrayCollection).getItemAt(0)['complexIndexKey'];
+		private function handleComplexIndexValueChanged(event:PropertyChangeEvent):void {			
+			var complexKey:String;
 			
 			if (event.oldValue.length > 0) {
+				complexKey = event.property.toString()+'.'+(event.oldValue as ArrayCollection).getItemAt(0)['complexIndexKey'];
 				unindexItem(event.source, complexKey, event.oldValue);
 			} 
 			
 			if (event.newValue.length > 0) {
+				complexKey = event.property.toString()+'.'+(event.newValue as ArrayCollection).getItemAt(0)['complexIndexKey'];
 				indexItem(event.source, complexKey, false);
 			}
 		}
