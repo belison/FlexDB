@@ -2,21 +2,19 @@
 
 <!-- This is an auto generated file and is not intended for modification. -->
 
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:flexui="flexunit.flexui.*" creationComplete="onCreationComplete()">
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:flexui="flexunit.flexui.*"
+			   minWidth="955" minHeight="600" creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
-			import FlexUnitTests.TableTester;
-			import FlexUnitTests.BaseDBTester;
 			import FlexUnitTests.FlexDBTestSuite;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
 				testsToRun.push(FlexUnitTests.FlexDBTestSuite);
-				testsToRun.push(FlexUnitTests.BaseDBTester);
-				testsToRun.push(FlexUnitTests.TableTester);
 				return testsToRun;
 			}
 			
@@ -31,6 +29,6 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<flexui:FlexUnitTestRunnerUI id="testRunner">
+	<flexui:FlexUnitTestRunnerUI id="testRunner" portNumber="8765">
 	</flexui:FlexUnitTestRunnerUI>
 </s:Application>

@@ -6,6 +6,7 @@ package
 	import mx.binding.utils.ChangeWatcher;
 	import mx.collections.ArrayCollection;
 	import mx.events.PropertyChangeEvent;
+	import mx.utils.UIDUtil;
 
 	public class Table
 	{
@@ -16,8 +17,6 @@ package
 		private var raw_collection:ArrayCollection;
 		
 		public var name:String;
-		
-		public var filterFunction:Function;
 		
 		public function Table()
 		{
@@ -73,7 +72,7 @@ package
 			return col
 		}
 		
-		public function find_all_by_filter():ArrayCollection {
+		public function find_all_by_filter(filterFunction:Function):ArrayCollection {
 			var filtered_collection:ArrayCollection = new ArrayCollection(raw_collection.source.slice(0,raw_collection.length));
 			filtered_collection.filterFunction = filterFunction;
 			filtered_collection.refresh();
@@ -85,6 +84,10 @@ package
 			var inserted:ArrayCollection = new ArrayCollection;
 			
 			for each (var item:Object in collection) {
+				//experimental 
+				if (!item[unique_key])
+					item[unique_key] = UIDUtil.createUID();
+				
 				if (unique_key && indexes.hasOwnProperty(unique_key) ) {
 					
 					if (indexes[unique_key].hasOwnProperty(item[unique_key])) {
